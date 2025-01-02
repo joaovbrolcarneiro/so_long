@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:14:26 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2024/12/30 20:41:33 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/02 18:24:02 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,12 @@ int	find_player_y(char **map)
 		y++;
 	}
 	return (-1);
+}
+
+int ft_strarr_len(char **arr)
+{
+    int len = 0;
+    while (arr[len])
+        len++;
+    return len;
 }

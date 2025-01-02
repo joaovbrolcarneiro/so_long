@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrol-ca <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:48:23 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2024/12/30 19:48:27 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:23:48 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ char	**load_map_from_file(const char *filename)
 	if (fd < 0)
 		return (NULL);
 	map = NULL;
-	while (get_next_line(fd, &line))
+	while ((line = get_next_line(fd)))
 	{
+		strip_newline(line); // Call strip_newline here
 		map = append_line_to_map(map, line);
 		free(line);
 	}
@@ -50,3 +51,40 @@ int	validate_map_structure(char **map)
 		return (0);
 	return (1);
 }
+
+char	**append_line_to_map(char **map, char *line)
+{
+	char	**new_map;
+	int		i;
+
+	if (!line)
+		return (map);
+	i = 0;
+	while (map && map[i])
+		i++;
+	new_map = (char **)malloc(sizeof(char *) * (i + 2));
+	if (!new_map)
+		return (NULL);
+	i = 0;
+	while (map && map[i])
+	{
+		new_map[i] = map[i];
+		i++;
+	}
+	new_map[i] = line;
+	new_map[i + 1] = NULL;
+	free(map);
+	return (new_map);
+}
+
+void	strip_newline(char *line)
+{
+	int	len;
+
+	if (!line)
+		return;
+	len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
+}
+

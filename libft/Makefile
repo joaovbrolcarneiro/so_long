@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jbrol-ca <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 22:09:17 by jbrol-ca          #+#    #+#              #
-#    Updated: 2024/12/20 19:16:12 by jbrol-ca         ###   ########.fr        #
+#    Updated: 2025/01/02 18:49:28 by jbrol-ca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJ_DIR             = ./obj
 
 # Compiler and Flags
 CC                  = cc
-CFLAGS              = -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS              = -Wall -Wextra -Werror -fPIC -I$(INC_DIR)
 RM                  = rm -f
 
 # Source Files
