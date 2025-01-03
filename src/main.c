@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:59:02 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 18:20:36 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 19:14:33 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,9 @@ int	main(int argc, char **argv)
 	state.map_width = map_width;
 	state.map_height = map_height;
 
+	// Count the collectibles before validating the map
+	state.collectibles = count_collectibles(map, &state);
+
 	// Validate map configuration using player position and map state
 	if (!validate_map(map, player_x, player_y, &state))
 		return (ft_printf("Error: Invalid map configuration\n"));
@@ -80,6 +83,7 @@ int	main(int argc, char **argv)
 	start_game(map);
 	return (0);
 }
+
 
 
 

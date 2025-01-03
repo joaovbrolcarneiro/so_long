@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:57:11 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 18:18:30 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 19:14:05 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ int validate_map(char **map, int x, int y, t_map_state *state) {
 
     return 1;
 }
+
 
 
 
