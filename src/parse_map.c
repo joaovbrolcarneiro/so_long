@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:48:23 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 15:38:06 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 19:36:23 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,17 +117,30 @@ int validate_map_structure(char **map)
 
     // Check for boundary walls
     for (i = 0; map[0][i] != '\0'; i++)  // Top row
+    {
         if (map[0][i] != '1')
+        {
+            ft_printf("Error: Top boundary is not properly walled.\n");
             return 0;
+        }
+    }
 
     for (i = 0; map[i] != NULL; i++)  // Bottom row
+    {
         if (map[i][row_length - 1] != '1')
+        {
+            ft_printf("Error: Bottom boundary is not properly walled.\n");
             return 0;
+        }
+    }
 
     for (i = 0; map[i] != NULL; i++)  // Check first and last column of each row
     {
         if (map[i][0] != '1' || map[i][row_length - 1] != '1')
+        {
+            ft_printf("Error: Side boundaries are not properly walled.\n");
             return 0;
+        }
     }
 
     // Check for exactly one player and one exit

@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:57:11 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 19:14:05 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 20:09:59 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@
     return 1;
 }*/
 
+
 int count_collectibles(char **map, t_map_state *state) {
     int collectibles = 0;
 
@@ -77,6 +78,7 @@ int count_collectibles(char **map, t_map_state *state) {
     return collectibles;
 }
 
+/* WITH DEBUGGING LOGS
 int validate_map(char **map, int x, int y, t_map_state *state) {
     // Check for bounds, invalid cells, or already visited cells
     if (x < 0 || y < 0 || x >= state->map_width || y >= state->map_height || map[y][x] == '1' || map[y][x] == 'V') {
@@ -115,7 +117,39 @@ int validate_map(char **map, int x, int y, t_map_state *state) {
     ft_printf("Returning from (%d, %d): Collectibles = %d, Exit Found = %d\n", x, y, state->collectibles, state->exit_found);
 
     return 1;
+}*/
+
+int validate_map(char **map, int x, int y, t_map_state *state, char visit_flag) {
+    // Check for bounds, invalid cells, or already visited cells
+    if (x < 0 || y < 0 || x >= state->map_width || y >= state->map_height || map[y][x] == '1' || map[y][x] == visit_flag) {
+        return 0; // Out of bounds, wall ('1'), or already visited cell
+    }
+
+    // Mark as visited
+    char original_cell = map[y][x];
+    map[y][x] = visit_flag;
+
+    // Update state if an exit is found
+    if (original_cell == 'E' && !state->exit_found) {
+        state->exit_found = 1;
+        ft_printf("Exit found at (%d, %d)\n", x, y);
+    }
+
+    // Do not decrement collectibles here
+    if (original_cell == 'C') {
+        ft_printf("Collectible found at (%d, %d)\n", x, y);
+    }
+
+    // Recursive calls to check adjacent cells (right, left, down, up)
+    int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    for (int i = 0; i < 4; i++) {
+        validate_map(map, x + directions[i][0], y + directions[i][1], state, visit_flag);
+    }
+
+    return 1;
 }
+
+
 
 
 
