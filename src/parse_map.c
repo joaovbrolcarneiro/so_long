@@ -6,12 +6,12 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:48:23 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/02 15:23:48 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 15:38:06 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
+/*
 char	**load_map_from_file(const char *filename)
 {
 	char	**map;
@@ -31,7 +31,54 @@ char	**load_map_from_file(const char *filename)
 	close(fd);
 	return (map);
 }
+*/
+char **load_map_from_file(const char *filename)
+{
+    char **map;
+    char *line;
+    int fd;
+    int i;
 
+    fd = open(filename, O_RDONLY);
+    if (fd < 0)
+    {
+        ft_printf("Error: Failed to open file %s\n", filename);
+        return (NULL);
+    }
+
+    // Allocate memory for the map
+    map = malloc(sizeof(char *) * MAX_MAP_ROWS); // Adjust MAX_MAP_ROWS as needed
+    if (!map)
+    {
+        ft_printf("Error: Memory allocation failed for map.\n");
+        close(fd);
+        return (NULL);
+    }
+
+    i = 0;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        ft_printf("Read line %d: %s\n", i, line);
+        strip_newline(line);  // Strip the newline character after reading
+        map[i++] = line;      // Add the line to the map
+    }
+
+    map[i] = NULL;  // Null-terminate the map
+
+    if (i == 0)
+    {
+        ft_printf("Error: File is empty or no valid lines found.\n");
+        free(map);
+        close(fd);
+        return (NULL);
+    }
+
+    close(fd);
+    return (map);
+}
+
+
+/*
 int	validate_map_structure(char **map)
 {
 	int	i;
@@ -50,6 +97,59 @@ int	validate_map_structure(char **map)
 	if (!is_wall(map[0]) || !is_wall(map[i - 1]))
 		return (0);
 	return (1);
+}
+*/
+
+int validate_map_structure(char **map)
+{
+    int i, j;
+    size_t row_length = ft_strlen(map[0]);
+
+    // Check if all rows are the same length
+    for (i = 1; map[i] != NULL; i++)
+    {
+        if (ft_strlen(map[i]) != row_length)
+        {
+            ft_printf("Error: Inconsistent row lengths.\n");
+            return 0;
+        }
+    }
+
+    // Check for boundary walls
+    for (i = 0; map[0][i] != '\0'; i++)  // Top row
+        if (map[0][i] != '1')
+            return 0;
+
+    for (i = 0; map[i] != NULL; i++)  // Bottom row
+        if (map[i][row_length - 1] != '1')
+            return 0;
+
+    for (i = 0; map[i] != NULL; i++)  // Check first and last column of each row
+    {
+        if (map[i][0] != '1' || map[i][row_length - 1] != '1')
+            return 0;
+    }
+
+    // Check for exactly one player and one exit
+    int player_count = 0, exit_count = 0;
+    for (i = 0; map[i] != NULL; i++)
+    {
+        for (j = 0; map[i][j] != '\0'; j++)
+        {
+            if (map[i][j] == 'P')
+                player_count++;
+            if (map[i][j] == 'E')
+                exit_count++;
+        }
+    }
+
+    if (player_count != 1 || exit_count != 1)
+    {
+        ft_printf("Error: There should be exactly one player (P) and one exit (E).\n");
+        return 0;
+    }
+
+    return 1;  // Map structure is valid
 }
 
 char	**append_line_to_map(char **map, char *line)

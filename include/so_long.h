@@ -11,6 +11,7 @@
  *                         Structures
  *********************************************************************/
 
+#define MAX_MAP_ROWS 100
 #define TILE_SIZE 32
 #define KEY_ESC 53
 #define KEY_UP 126
@@ -18,11 +19,13 @@
 #define KEY_LEFT 123
 #define KEY_RIGHT 124
 
-typedef struct s_map_state
-{
-    int     collectibles;
-    int     exit_found;
-}   t_map_state;
+typedef struct s_map_state {
+    int collectibles;
+    int exit_found;
+    int map_width;
+    int map_height;
+    int collectible_visited;
+} t_map_state;
 
 typedef struct s_game
 {
@@ -40,7 +43,8 @@ typedef struct s_game
  *                         Function Prototypes
  *********************************************************************/
 
-void strip_newline(char *line)
+int count_collectibles(char **map, t_map_state *state);
+void    strip_newline(char *line);
 int 	ft_strarr_len(char **arr);
 void    move_player(t_game *game, int new_x, int new_y);
 void    check_for_collisions(t_game *game, int player_x, int player_y);
@@ -62,6 +66,7 @@ int     find_player_y(char **map);
 char    **append_line_to_map(char **map, char *line);
 int		handle_key_press(int key, t_game *game);
 void init_hooks(t_game *game);
+void get_map_dimensions(char **map, int *width, int *height);
 
 #endif /* SO_LONG_H */
 
