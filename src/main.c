@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:59:02 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 20:02:28 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/03 20:39:15 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
     if (state.collectibles == 0 || state.exit_found == 0)
         return (ft_printf("Error: Unreachable collectibles or exit\n"));
     
-    ft_printf("Error: validation complete.\n");
+    ft_printf("Sucess: validation complete. Game will start:\n");
 
     // Start the game
     start_game(map);

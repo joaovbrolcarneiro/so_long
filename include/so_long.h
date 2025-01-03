@@ -35,6 +35,9 @@ typedef struct s_game
     void    *win;
     void    *wall_img;
     void    *player_img;
+    void    *collectible_img;
+    void    *floor_img;
+    void    *exit_img;  // Add texture for the exit
     int     collectibles;
     char    **map; // Add map member
 }   t_game;
