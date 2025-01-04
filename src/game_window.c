@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:56 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/04 15:26:51 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:22:33 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,23 @@ void render_game(t_game *game, char **map)
         x = 0;
         while (x < (int)ft_strlen(map[y]))
         {
+            // Debugging: Print tile and coordinates
+            ft_printf("Rendering tile: (%d, %d) - '%c'\n", x, y, map[y][x]);
+
             // Render floor tiles (0)
             if (map[y][x] == '0')
                 mlx_put_image_to_window(game->mlx, game->win, game->floor_img, x * TILE_SIZE, y * TILE_SIZE);
-            
+         
             // Render walls (1)
             if (map[y][x] == '1')
                 mlx_put_image_to_window(game->mlx, game->win, game->wall_img, x * TILE_SIZE, y * TILE_SIZE);
 
             // Render player (P)
             if (map[y][x] == 'P')
+            {
+                ft_printf("Rendering player at: (%d, %d)\n", x, y);  // Debug print
                 mlx_put_image_to_window(game->mlx, game->win, game->player_img, x * TILE_SIZE, y * TILE_SIZE);
+            }
 
             // Render collectibles (C)
             if (map[y][x] == 'C')
@@ -124,6 +130,7 @@ void render_game(t_game *game, char **map)
 }
 
 
+
 /* *********************************************************************
  * Cleans up the game window and MLX resources.
  *********************************************************************/
@@ -133,4 +140,23 @@ void	cleanup_game(t_game *game)
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);  // Close the window
 }
+void update_map_position(char **map, int player_x, int player_y)
+{
+    for (int y = 0; y < ft_strarr_len(map); y++) {
+        for (size_t x = 0; x < ft_strlen(map[y]); x++) {
+            if (map[y][x] == 'P')
+                map[y][x] = '0';  // Replace previous player position with empty floor
+
+            if ((size_t)x == (size_t)player_x && (size_t)y == (size_t)player_y)  // Cast player_x and player_y to size_t
+                map[y][x] = 'P';  // Place player at new position
+        }
+    }
+    // Debugging: Print the updated map
+    for (int y = 0; y < ft_strarr_len(map); y++) {
+        ft_printf("Row %d: %s\n", y, map[y]);
+    }
+}
+
+
+
 

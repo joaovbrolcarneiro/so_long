@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:05:14 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/04 15:04:50 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:18:45 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ int start_game(char **map)
     init_hooks(&game);
 
     // Main game loop
-    while (game_is_running(&game))
-    {
-        mlx_do_sync(game.mlx);  // Ensure the window updates correctly
-        render_game(&game, map);  // Render the updated game state
-    }
+    mlx_loop(game.mlx);  // Start the event loop to process key presses and render the game
 
     cleanup_game(&game);  // Cleanup after the game loop ends
     return (0);
@@ -64,31 +60,47 @@ int game_is_running(t_game *game)
 
 int handle_key_press(int keycode, t_game *game)
 {
+    ft_printf("Key pressed: %d\n", keycode);  // Debugging print
+
     // ESC key: Exit the game
     if (keycode == KEY_ESC)
     {
         mlx_destroy_window(game->mlx, game->win);
-        game->win = NULL;  // Mark the window as destroyed
-        exit(0);  // Exit the game
+        game->win = NULL;
+        exit(0);
     }
 
     // Player movement handling
-    int player_x = game->player_x;
-    int player_y = game->player_y;
-
     if (keycode == KEY_UP)
-        move_player(game, player_x, player_y - 1);  // Move up
+    {
+        ft_printf("Moving UP\n");
+        game->player_y -= 1;
+    }
     else if (keycode == KEY_DOWN)
-        move_player(game, player_x, player_y + 1);  // Move down
+    {
+        ft_printf("Moving DOWN\n");
+        game->player_y += 1;
+    }
     else if (keycode == KEY_LEFT)
-        move_player(game, player_x - 1, player_y);  // Move left
+    {
+        ft_printf("Moving LEFT\n");
+        game->player_x -= 1;
+    }
     else if (keycode == KEY_RIGHT)
-        move_player(game, player_x + 1, player_y);  // Move right
+    {
+        ft_printf("Moving RIGHT\n");
+        game->player_x += 1;
+    }
 
-    // Check for collisions or game-over conditions
-    check_for_collisions(game, player_x, player_y);
+    // Validate position before updating
+    if (game->map[game->player_y][game->player_x] != '1')  // Ensure not a wall
+    {
+        update_map_position(game->map, game->player_x, game->player_y);
+        ft_printf("Player position updated to: (%d, %d)\n", game->player_x, game->player_y);
+        render_game(game, game->map);  // Render the updated game state after movement
+    }
 
-    return (0);  // Return 0 to indicate the event was handled
+    return (0);
 }
 
 /* *********************************************************************
@@ -100,3 +112,20 @@ void init_hooks(t_game *game)
     // Hook the key press events to the handle_key_press function
     mlx_key_hook(game->win, handle_key_press, game);
 }
+
+/*int is_valid_move(t_game *game, int new_x, int new_y)
+{
+    // Check if the new position is within the bounds of the map
+    if (new_x < 0 || new_x >= game->map_state.map_width || new_y < 0 || new_y >= game->map_state.map_height)
+        return 0;  // Invalid move (out of bounds)
+    
+    // Check if the new position is a wall (1)
+    if (game->map[new_y][new_x] == '1')
+        return 0;  // Invalid move (wall)
+
+    return 1;  // Valid move
+}
+*/
+
+
+

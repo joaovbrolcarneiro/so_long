@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:57:11 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/04 15:23:13 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 15:38:39 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,33 +119,32 @@ int validate_map(char **map, int x, int y, t_map_state *state) {
     return 1;
 }*/
 
-int validate_map(char **map, int x, int y, t_map_state *state, char visit_flag) {
+int validate_map(char **map, int x, int y, t_map_state *state, char **visited)
+{
     // Check for bounds, invalid cells, or already visited cells
-    if (x < 0 || y < 0 || x >= state->map_width || y >= state->map_height || map[y][x] == '1' || map[y][x] == visit_flag) {
+    if (x < 0 || y < 0 || x >= state->map_width || y >= state->map_height || map[y][x] == '1' || visited[y][x])
         return 0; // Out of bounds, wall ('1'), or already visited cell
-    }
 
-    // Save the original cell value and mark it as visited
-    char original_cell = map[y][x];
-    map[y][x] = visit_flag;
+    // Mark the current cell as visited in the visited map
+    visited[y][x] = 1;
 
     // Update state if an exit or collectible is found
-    if (original_cell == 'E') {
+    if (map[y][x] == 'E') {
         state->exit_found = 1;
         ft_printf("Exit found at (%d, %d)\n", x, y);
-    } else if (original_cell == 'C') {
+    } else if (map[y][x] == 'C') {
         ft_printf("Collectible found at (%d, %d)\n", x, y);
     }
 
     // Recursive calls to check adjacent cells (right, left, down, up)
     int directions[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
     for (int i = 0; i < 4; i++) {
-        validate_map(map, x + directions[i][0], y + directions[i][1], state, visit_flag);
+        validate_map(map, x + directions[i][0], y + directions[i][1], state, visited);
     }
 
-    // After validation, you can leave 'V' or restore if necessary
     return 1;
 }
+
 
 
 

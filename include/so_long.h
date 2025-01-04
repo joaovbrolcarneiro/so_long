@@ -39,6 +39,7 @@ typedef struct s_game
     void    *floor_img;
     void    *exit_img;  // Add texture for the exit
     int     collectibles;
+    t_map_state map_state; // Include map state struct for dimensions
     char    **map; // Add map member
 }   t_game;
 
@@ -46,6 +47,12 @@ typedef struct s_game
  *                         Function Prototypes
  *********************************************************************/
 
+char    **parse_arguments_and_load_map(int argc, char **argv);
+int     validate_map_structure_and_player_position(char **map, t_map_state *state, int map_width, int map_height, int *player_x, int *player_y);
+char    **initialize_visited_map(int map_width, int map_height);
+void    clean_up_visited_map(char **visited, int map_height);
+void update_map_position(char **map, int player_x, int player_y);
+int is_valid_move(t_game *game, int new_x, int new_y);
 void restore_map(char **map);
 int count_collectibles(char **map, t_map_state *state);
 void    strip_newline(char *line);
@@ -54,7 +61,7 @@ void    move_player(t_game *game, int new_x, int new_y);
 void    check_for_collisions(t_game *game, int player_x, int player_y);
 int     main(int argc, char **argv);
 char    **load_map_from_file(const char *filename);
-int     validate_map(char **map, int x, int y, t_map_state *state, char visit_flag);
+int     validate_map(char **map, int x, int y, t_map_state *state, char **visited);
 int     validate_map_structure(char **map);
 int     ft_error(const char *message);
 int     is_wall(const char *line);
