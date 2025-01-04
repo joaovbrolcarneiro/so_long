@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:56 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 21:51:48 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 15:26:51 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,35 +18,34 @@
 
 int init_window(t_game *game, char **map)
 {
-    int width, height;  // To hold the width and height of textures
+    int width, height;
 
-    game->mlx = mlx_init();  // Initialize the MLX library
+    game->mlx = mlx_init();
     if (!game->mlx)
     {
         ft_printf("Error: MLX initialization failed\n");
-        return (0);  // Failed to initialize MLX
+        return (0);
     }
 
     int map_width = ft_strlen(map[0]) * TILE_SIZE;
     int map_height = ft_strarr_len(map) * TILE_SIZE;
 
-    // Create a new window for the game
     game->win = mlx_new_window(game->mlx, map_width, map_height, "So Long");
     if (!game->win)
     {
         ft_printf("Error: Window creation failed\n");
-        mlx_destroy_display(game->mlx);  // Clean up if window creation fails
+        mlx_destroy_display(game->mlx);
         free(game->mlx);
-        return (0);  // Failed to create window
+        return (0);
     }
 
-    // Load the images (textures) for walls, player, collectibles, floor, and exit
     game->wall_img = mlx_xpm_file_to_image(game->mlx, "textures/wall.xpm", &width, &height);
     if (!game->wall_img)
     {
         ft_printf("Error: Failed to load wall texture\n");
         return (0);
     }
+    ft_printf("Wall texture loaded: %p (Width = %d, Height = %d)\n", game->wall_img, width, height);
 
     game->player_img = mlx_xpm_file_to_image(game->mlx, "textures/player.xpm", &width, &height);
     if (!game->player_img)
@@ -54,6 +53,7 @@ int init_window(t_game *game, char **map)
         ft_printf("Error: Failed to load player texture\n");
         return (0);
     }
+    ft_printf("Player texture loaded: %p (Width = %d, Height = %d)\n", game->player_img, width, height);
 
     game->collectible_img = mlx_xpm_file_to_image(game->mlx, "textures/collectible.xpm", &width, &height);
     if (!game->collectible_img)
@@ -61,6 +61,7 @@ int init_window(t_game *game, char **map)
         ft_printf("Error: Failed to load collectible texture\n");
         return (0);
     }
+    ft_printf("Collectible texture loaded: %p (Width = %d, Height = %d)\n", game->collectible_img, width, height);
 
     game->floor_img = mlx_xpm_file_to_image(game->mlx, "textures/floor.xpm", &width, &height);
     if (!game->floor_img)
@@ -68,16 +69,17 @@ int init_window(t_game *game, char **map)
         ft_printf("Error: Failed to load floor texture\n");
         return (0);
     }
+    ft_printf("Floor texture loaded: %p (Width = %d, Height = %d)\n", game->floor_img, width, height);
 
-    // Load the exit texture
     game->exit_img = mlx_xpm_file_to_image(game->mlx, "textures/exit.xpm", &width, &height);
     if (!game->exit_img)
     {
         ft_printf("Error: Failed to load exit texture\n");
         return (0);
     }
+    ft_printf("Exit texture loaded: %p (Width = %d, Height = %d)\n", game->exit_img, width, height);
 
-    return (1);  // Success
+    return (1);
 }
 
 

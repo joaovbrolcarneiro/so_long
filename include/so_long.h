@@ -46,6 +46,7 @@ typedef struct s_game
  *                         Function Prototypes
  *********************************************************************/
 
+void restore_map(char **map);
 int count_collectibles(char **map, t_map_state *state);
 void    strip_newline(char *line);
 int 	ft_strarr_len(char **arr);

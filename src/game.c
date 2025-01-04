@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:05:14 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 21:50:33 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 15:04:50 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,14 @@ int start_game(char **map)
 {
     t_game game;
 
+    // Set player position
+    game.player_x = find_player_x(map);
+    game.player_y = find_player_y(map);
+    ft_printf("Player position initialized: x=%d, y=%d\n", game.player_x, game.player_y);
+
+    // Assign the map to the game structure
+    game.map = map;
+
     // Initialize the window
     if (!init_window(&game, map))
         return (ft_error("Error: Unable to initialize the window"));
@@ -30,17 +38,11 @@ int start_game(char **map)
     // Main game loop
     while (game_is_running(&game))
     {
-        // Handle key events in the game loop
         mlx_do_sync(game.mlx);  // Ensure the window updates correctly
-
-        // No need for update_game_state here, as movement and checks are handled in handle_key_press
-
-        // Render the updated game state on the window
-        render_game(&game, map);
+        render_game(&game, map);  // Render the updated game state
     }
 
-    // Cleanup after the game loop ends
-    cleanup_game(&game);
+    cleanup_game(&game);  // Cleanup after the game loop ends
     return (0);
 }
 

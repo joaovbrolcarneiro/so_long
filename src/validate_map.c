@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 19:57:11 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/03 20:09:59 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 15:23:13 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,15 @@ int validate_map(char **map, int x, int y, t_map_state *state, char visit_flag) 
         return 0; // Out of bounds, wall ('1'), or already visited cell
     }
 
-    // Mark as visited
+    // Save the original cell value and mark it as visited
     char original_cell = map[y][x];
     map[y][x] = visit_flag;
 
-    // Update state if an exit is found
-    if (original_cell == 'E' && !state->exit_found) {
+    // Update state if an exit or collectible is found
+    if (original_cell == 'E') {
         state->exit_found = 1;
         ft_printf("Exit found at (%d, %d)\n", x, y);
-    }
-
-    // Do not decrement collectibles here
-    if (original_cell == 'C') {
+    } else if (original_cell == 'C') {
         ft_printf("Collectible found at (%d, %d)\n", x, y);
     }
 
@@ -146,8 +143,10 @@ int validate_map(char **map, int x, int y, t_map_state *state, char visit_flag) 
         validate_map(map, x + directions[i][0], y + directions[i][1], state, visit_flag);
     }
 
+    // After validation, you can leave 'V' or restore if necessary
     return 1;
 }
+
 
 
 
