@@ -13,11 +13,11 @@
 
 #define MAX_MAP_ROWS 100
 #define TILE_SIZE 32
-#define KEY_ESC 53
-#define KEY_UP 126
-#define KEY_DOWN 125
-#define KEY_LEFT 123
-#define KEY_RIGHT 124
+#define KEY_ESC 65307
+#define KEY_UP 65362
+#define KEY_DOWN 65364
+#define KEY_LEFT 65361
+#define KEY_RIGHT 65363
 
 typedef struct s_map_state {
     int collectibles;
@@ -29,6 +29,8 @@ typedef struct s_map_state {
 
 typedef struct s_game
 {
+    int     map_height;
+    int     map_width;
     int     player_x;
     int     player_y;
     void    *mlx;
@@ -47,11 +49,12 @@ typedef struct s_game
  *                         Function Prototypes
  *********************************************************************/
 
+void update_game_map(t_game *game);
 char    **parse_arguments_and_load_map(int argc, char **argv);
 int     validate_map_structure_and_player_position(char **map, t_map_state *state, int map_width, int map_height, int *player_x, int *player_y);
 char    **initialize_visited_map(int map_width, int map_height);
 void    clean_up_visited_map(char **visited, int map_height);
-void update_map_position(char **map, int player_x, int player_y);
+void update_map_position(char **map, t_game *game);
 int is_valid_move(t_game *game, int new_x, int new_y);
 void restore_map(char **map);
 int count_collectibles(char **map, t_map_state *state);

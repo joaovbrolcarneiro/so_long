@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:56 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/04 18:22:33 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:25:21 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,14 @@ void	cleanup_game(t_game *game)
 	if (game->win)
 		mlx_destroy_window(game->mlx, game->win);  // Close the window
 }
-void update_map_position(char **map, int player_x, int player_y)
+void update_map_position(char **map, t_game *game)
 {
     for (int y = 0; y < ft_strarr_len(map); y++) {
         for (size_t x = 0; x < ft_strlen(map[y]); x++) {
             if (map[y][x] == 'P')
                 map[y][x] = '0';  // Replace previous player position with empty floor
 
-            if ((size_t)x == (size_t)player_x && (size_t)y == (size_t)player_y)  // Cast player_x and player_y to size_t
+            if ((size_t)x == (size_t)game->player_x && (size_t)y == (size_t)game->player_y)  // Use game structure
                 map[y][x] = 'P';  // Place player at new position
         }
     }

@@ -6,7 +6,7 @@
 /*   By: jbrol-ca <jbrol-ca@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 18:05:14 by jbrol-ca          #+#    #+#             */
-/*   Updated: 2025/01/04 18:18:45 by jbrol-ca         ###   ########.fr       */
+/*   Updated: 2025/01/04 18:50:11 by jbrol-ca         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,11 @@ int game_is_running(t_game *game)
  * It handles key events like ESC and player movement.
  *********************************************************************/
 
+/* *********************************************************************
+ * This function is called when a key is pressed.
+ * It handles key events like ESC and player movement.
+ *********************************************************************/
+
 int handle_key_press(int keycode, t_game *game)
 {
     ft_printf("Key pressed: %d\n", keycode);  // Debugging print
@@ -74,34 +79,66 @@ int handle_key_press(int keycode, t_game *game)
     if (keycode == KEY_UP)
     {
         ft_printf("Moving UP\n");
-        game->player_y -= 1;
+        if (game->player_y > 0 && game->map[game->player_y - 1][game->player_x] != '1') // Check if within bounds and not a wall
+            game->player_y -= 1;
     }
     else if (keycode == KEY_DOWN)
     {
         ft_printf("Moving DOWN\n");
-        game->player_y += 1;
+        if (game->player_y < game->map_height - 1 && game->map[game->player_y + 1][game->player_x] != '1') // Check if within bounds and not a wall
+            game->player_y += 1;
     }
     else if (keycode == KEY_LEFT)
     {
         ft_printf("Moving LEFT\n");
-        game->player_x -= 1;
+        if (game->player_x > 0 && game->map[game->player_y][game->player_x - 1] != '1') // Check if within bounds and not a wall
+            game->player_x -= 1;
     }
     else if (keycode == KEY_RIGHT)
     {
         ft_printf("Moving RIGHT\n");
-        game->player_x += 1;
+        if (game->player_x < game->map_width - 1 && game->map[game->player_y][game->player_x + 1] != '1') // Check if within bounds and not a wall
+            game->player_x += 1;
     }
 
-    // Validate position before updating
-    if (game->map[game->player_y][game->player_x] != '1')  // Ensure not a wall
-    {
-        update_map_position(game->map, game->player_x, game->player_y);
-        ft_printf("Player position updated to: (%d, %d)\n", game->player_x, game->player_y);
-        render_game(game, game->map);  // Render the updated game state after movement
-    }
+    // After updating position, re-render the map if the player moved
+    ft_printf("Player position updated to: (%d, %d)\n", game->player_x, game->player_y);
+    update_game_map(game);  // Update the map with new player position, collectibles, etc.
+    render_game(game, game->map);  // Render the updated game state after movement
 
     return (0);
 }
+
+
+/* *********************************************************************
+ * This function updates the entire game map, including player, 
+ * collectibles, and any other dynamic objects.
+ *********************************************************************/
+
+void update_game_map(t_game *game)
+{
+    for (int y = 0; y < ft_strarr_len(game->map); y++) 
+    {
+        for (size_t x = 0; x < ft_strlen(game->map[y]); x++) 
+        {
+            // If a previous player position is found, replace it with empty space
+            if (game->map[y][x] == 'P')
+                game->map[y][x] = '0'; 
+
+            // If the current position matches the player's new position, place the player
+            if ((size_t)x == (size_t)game->player_x && (size_t)y == (size_t)game->player_y) 
+                game->map[y][x] = 'P';  // Place player at the new position
+        }
+    }
+
+    // Debugging: Print the updated map
+    for (int y = 0; y < ft_strarr_len(game->map); y++) 
+    {
+        ft_printf("Row %d: %s\n", y, game->map[y]);
+    }
+}
+
+
 
 /* *********************************************************************
  * This function sets up the key hooks using mlx_key_hook.
